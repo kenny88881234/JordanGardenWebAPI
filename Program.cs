@@ -2,6 +2,7 @@ using System.Reflection;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
+using Microsoft.EntityFrameworkCore;
 
 const string OUTPUT_TEMPLATE = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
 Log.Logger = new LoggerConfiguration()
@@ -23,6 +24,12 @@ try
     // Add services to the container.
 
     builder.Services.AddControllers();
+
+    builder.Services.AddDbContextPool<JordanGardenDbContext>(
+        options => options.UseSqlServer(
+            builder.Configuration.GetConnectionString("JordanGardenDatabase"),
+            providerOptions => { providerOptions.EnableRetryOnFailure(); }));
+
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen(options =>
