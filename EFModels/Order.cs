@@ -11,7 +11,7 @@ public class Order
 
     public DateTime CreateTime { get; set; }
 
-    public DateTime UpdateTime { get; set; }
+    public DateTime Uptimestamp { get; set; }
 
     public List<OrderDetail> OrderDetails { get; set; } = default!;
 }
@@ -41,16 +41,16 @@ public class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
             .Property(o => o.CreateTime)
             .IsRequired()
             .HasColumnName("Create_Time")
-            .HasColumnType("datetime")
-            .HasDefaultValueSql("getdate()")
+            .HasColumnType("timestamp")
+            .HasDefaultValueSql("now()")
             .HasColumnOrder(3);
 
         builder
-            .Property(o => o.UpdateTime)
+            .Property(o => o.Uptimestamp)
             .IsRequired()
             .HasColumnName("Update_Time")
-            .HasColumnType("datetime")
-            .HasDefaultValueSql("getdate()")
+            .HasColumnType("timestamp")
+            .HasDefaultValueSql("now()")
             .HasColumnOrder(4);
     }
 }

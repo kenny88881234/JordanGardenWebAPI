@@ -33,13 +33,13 @@ public class TillandsiaEntityTypeConfiguration : IEntityTypeConfiguration<Tillan
         builder
             .Property(t => t.NameChi)
             .HasColumnName("Name_Chi")
-            .HasColumnType("nvarchar(20)")
+            .HasColumnType("varchar(20)")
             .HasColumnOrder(2);
 
         builder
             .Property(t => t.Image)
-            .HasColumnName("Name_Eng")
-            .HasColumnType("nvarchar(300)")
+            .HasColumnName("Image")
+            .HasColumnType("varchar(300)")
             .HasColumnOrder(3);
     }
 }

@@ -10,7 +10,7 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
     .Enrich.FromLogContext()
     .WriteTo.Console(outputTemplate: OUTPUT_TEMPLATE)
-    .WriteTo.File(@".\Logs\log-.txt", rollingInterval: RollingInterval.Day, outputTemplate: OUTPUT_TEMPLATE)
+    .WriteTo.File(@"Logs/log-.log", rollingInterval: RollingInterval.Day, outputTemplate: OUTPUT_TEMPLATE)
     .CreateLogger();
 
 try
@@ -26,7 +26,7 @@ try
     builder.Services.AddControllers();
 
     builder.Services.AddDbContextPool<JordanGardenDbContext>(
-        options => options.UseSqlServer(
+        options => options.UseNpgsql(
             builder.Configuration.GetConnectionString("JordanGardenDatabase"),
             providerOptions => { providerOptions.EnableRetryOnFailure(); }));
 
@@ -76,6 +76,12 @@ try
 }
 catch(Exception ex)
 {
+    string type = ex.GetType().Name;
+    if (type.Equals("StopTheHostException", StringComparison.Ordinal))
+    {
+        throw;
+    }
+
     Log.Fatal(ex, "Stopped program because of exception");
 }
 finally

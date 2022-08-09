@@ -28,7 +28,7 @@ public class CompanyEntityTypeConfiguration : IEntityTypeConfiguration<Company>
         builder
             .Property(c => c.Name)
             .IsRequired()
-            .HasColumnType("nvarchar(20)")
+            .HasColumnType("varchar(20)")
             .HasColumnOrder(1);
 
         builder
@@ -40,12 +40,12 @@ public class CompanyEntityTypeConfiguration : IEntityTypeConfiguration<Company>
         builder
             .Property(c => c.Country)
             .IsRequired()
-            .HasColumnType("nvarchar(20)")
+            .HasColumnType("varchar(20)")
             .HasColumnOrder(3);
 
         builder
             .Property(c => c.Address)
-            .HasColumnType("nvarchar(200)")
+            .HasColumnType("varchar(200)")
             .HasColumnOrder(4);
     }
 }
