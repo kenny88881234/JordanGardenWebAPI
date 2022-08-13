@@ -31,7 +31,7 @@ try
 
     builder.Services.AddControllers();
 
-    builder.Services.AddDbContextPool<JordanGardenDbContext>(
+    builder.Services.AddDbContextPool<JordanGardenStockDbContext>(
         options => options.UseNpgsql(
             builder.Configuration.GetConnectionString("JordanGardenDatabase"),
             providerOptions => { providerOptions.EnableRetryOnFailure(); }));

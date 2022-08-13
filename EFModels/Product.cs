@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -19,8 +18,6 @@ public class Product
     public Company Company { get; set; } = default!;
 
     public Tillandsia Tillandsia { get; set; } = default!;
-
-    public List<OrderDetail> OrderDetails { get; set; } = default!;
 }
 
 public class ProductEntityTypeConfiguration : IEntityTypeConfiguration<Product>
