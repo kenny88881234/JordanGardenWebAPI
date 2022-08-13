@@ -1,16 +1,22 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 public class Tillandsia
 {
+    [JsonPropertyName("id")]
     public int Id { get; set; }
 
+    [JsonPropertyName("nameEng")]
     public string NameEng { get; set; } = default!;
 
+    [JsonPropertyName("nameChi")]
     public string? NameChi { get; set; }
 
+    [JsonPropertyName("image")]
     public string? Image { get; set; }
 
+    [JsonIgnore]
     public List<Product> Products { get; set; } = default!;
 }
 

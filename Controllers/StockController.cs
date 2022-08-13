@@ -16,37 +16,51 @@ public class TillandsiaController : ControllerBase
     }
 
     /// <summary>
-    /// 取得空氣鳳梨
+    /// 依ID取得空氣鳳梨
     /// </summary>
-    /// <param name="Id">空氣鳳梨ID，為空時改為依頁數取得空氣鳳梨</param>
-    /// <param name="Page">頁數，為空時取得所有空氣鳳梨</param>
+    /// <param name="Id">空氣鳳梨ID</param>
     /// <returns>空氣鳳梨</returns>
     [HttpGet("{Id:int}")]
-    public ActionResult<APIResult<object>> Get(int? Id, int Page = 0)
+    public ActionResult<APIResult<Tillandsia>> GetById(int Id)
     {
-        APIResult<object> apiResult = new APIResult<object>();
+        APIResult<Tillandsia> apiResult = new APIResult<Tillandsia>();
 
-        if(Id.HasValue)
+        Tillandsia? tillandsia = _service.GetTillandsia((int)Id);
+        if (tillandsia is null)
         {
-            object? tillandsia = _service.GetTillandsia((int)Id);
-            if (tillandsia is null)
-            {
-                apiResult.Succ = false;
-                apiResult.ErrorCode = "";
+            apiResult.Succ = false;
+            apiResult.ErrorCode = "";
+            apiResult.Message = "The id is not exist";
 
-                _logger.LogInformation("The id is not exist");
-                return BadRequest(apiResult);
-            }
-
-            apiResult.Succ = true;
-            apiResult.Data = tillandsia;
-        }
-        else
-        {
-            //object? tillandsias = _service.GetTillandsias(Page);
+            _logger.LogInformation(apiResult.Message);
+            return BadRequest(apiResult);
         }
 
-        _logger.LogInformation("Success");
+        apiResult.Succ = true;
+        apiResult.Message = "Success";
+        apiResult.Data = tillandsia;
+
+        _logger.LogInformation(apiResult.Message);
+        return apiResult;
+    }
+
+    /// <summary>
+    /// 依頁數取得空氣鳳梨
+    /// </summary>
+    /// <param name="Page">頁數，為空時取得所有空氣鳳梨</param>
+    /// <returns>當前頁空氣鳳梨</returns>
+    [HttpGet]
+    public ActionResult<APIResult<List<Tillandsia>>> GetByPage(int Page = 0)
+    {
+        APIResult<List<Tillandsia>> apiResult = new APIResult<List<Tillandsia>>();
+
+        List<Tillandsia> tillandsias = _service.GetTillandsias(Page);
+
+        apiResult.Succ = true;
+        apiResult.Message = "Success";
+        apiResult.Data = tillandsias;
+
+        _logger.LogInformation(apiResult.Message);
         return apiResult;
     }
 }
