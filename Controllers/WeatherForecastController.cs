@@ -1,6 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
-namespace JordanGardenWebAPI.Controllers;
+namespace JordanGardenStockWebAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]

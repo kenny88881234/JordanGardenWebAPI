@@ -3,6 +3,12 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using System;
+using Microsoft.Extensions.Hosting;
+using System.IO;
 
 const string OUTPUT_TEMPLATE = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
 Log.Logger = new LoggerConfiguration()

@@ -1,4 +1,6 @@
-namespace JordanGardenWebAPI;
+using System;
+
+namespace JordanGardenStockWebAPI;
 
 public class WeatherForecast
 {

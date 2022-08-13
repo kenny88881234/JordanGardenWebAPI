@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "JordanGardenWebAPI": {
+    "JordanGardenStockWebAPI": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
