@@ -15,7 +15,6 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
     .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
     .Enrich.FromLogContext()
-    .WriteTo.Console(outputTemplate: OUTPUT_TEMPLATE)
     .WriteTo.File(@"Logs/log-.log", rollingInterval: RollingInterval.Day, outputTemplate: OUTPUT_TEMPLATE)
     .CreateLogger();
 
@@ -36,6 +35,8 @@ try
             builder.Configuration.GetConnectionString("JordanGardenDatabase"),
             providerOptions => { providerOptions.EnableRetryOnFailure(); }));
 
+    builder.Services.AddTransient<TillandsiaService>();
+
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen(options =>
@@ -43,11 +44,11 @@ try
         options.SwaggerDoc("v1", new OpenApiInfo
         {
             Version = "v1",
-            Title = "Jordan Garden API",
-            Description = "An ASP.NET Core Web API for Jordan Garden's business"
+            Title = "Jordan Garden Stock API",
+            Description = "An ASP.NET Core Web API for Jordan Garden's stock function"
         });
 
-    // using System.Reflection;
+        // using System.Reflection;
         var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
     });

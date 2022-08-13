@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/JordanGardenWebAPI.csproj",
+                "${workspaceFolder}/JordanGardenStockWebAPI.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/JordanGardenWebAPI.csproj",
+                "${workspaceFolder}/JordanGardenStockWebAPI.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/JordanGardenWebAPI.csproj"
+                "${workspaceFolder}/JordanGardenStockWebAPI.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
