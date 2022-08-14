@@ -21,11 +21,13 @@ public class TillandsiaController : ControllerBase
     /// <param name="Id">空氣鳳梨ID</param>
     /// <returns>空氣鳳梨</returns>
     [HttpGet("{Id:int}")]
-    public ActionResult<APIResult<Tillandsia>> GetById(int Id)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<APIResult<Tillandsia>>> GetById(int Id)
     {
         APIResult<Tillandsia> apiResult = new APIResult<Tillandsia>();
 
-        Tillandsia? tillandsia = _service.GetTillandsia((int)Id);
+        Tillandsia? tillandsia = await _service.GetTillandsiaAsync((int)Id);
         if (tillandsia is null)
         {
             apiResult.Succ = false;
@@ -33,7 +35,7 @@ public class TillandsiaController : ControllerBase
             apiResult.Message = "The id is not exist";
 
             _logger.LogInformation(apiResult.Message);
-            return BadRequest(apiResult);
+            return NotFound(apiResult);
         }
 
         apiResult.Succ = true;
@@ -50,11 +52,22 @@ public class TillandsiaController : ControllerBase
     /// <param name="Page">頁數，為空時取得所有空氣鳳梨</param>
     /// <returns>當前頁空氣鳳梨</returns>
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<APIResult<List<Tillandsia>>> GetByPage(int Page = 0)
     {
         APIResult<List<Tillandsia>> apiResult = new APIResult<List<Tillandsia>>();
 
         List<Tillandsia> tillandsias = _service.GetTillandsias(Page);
+        if (tillandsias.Count is 0)
+        {
+            apiResult.Succ = false;
+            apiResult.ErrorCode = "";
+            apiResult.Message = "The page is null";
+
+            _logger.LogInformation(apiResult.Message);
+            return NotFound(apiResult);
+        }
 
         apiResult.Succ = true;
         apiResult.Message = "Success";
@@ -62,5 +75,31 @@ public class TillandsiaController : ControllerBase
 
         _logger.LogInformation(apiResult.Message);
         return apiResult;
+    }
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<APIResult<Tillandsia>>> Add([FromBody]Tillandsia tillandsia)
+    {
+        APIResult<Tillandsia> apiResult = new APIResult<Tillandsia>();
+
+        if(!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        if(!await _service.AddTillandsiaAsync(tillandsia))
+        {
+            apiResult.Succ = false;
+            apiResult.ErrorCode = "";
+            apiResult.Message = "The name is alredy exist";
+
+            _logger.LogInformation(apiResult.Message);
+            return BadRequest(apiResult);
+        }
+
+        _logger.LogInformation("Success");
+        return CreatedAtAction(nameof(GetById), new { Id = tillandsia.Id }, tillandsia);
     }
 }

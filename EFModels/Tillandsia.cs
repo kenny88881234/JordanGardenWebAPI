@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -8,16 +9,20 @@ public class Tillandsia
     public int Id { get; set; }
 
     [JsonPropertyName("nameEng")]
+    [Required]
+    [MaxLength(50)]
     public string NameEng { get; set; } = default!;
 
     [JsonPropertyName("nameChi")]
+    [MaxLength(20)]
     public string? NameChi { get; set; }
 
     [JsonPropertyName("image")]
+    [MaxLength(300)]
     public string? Image { get; set; }
 
     [JsonIgnore]
-    public List<Product> Products { get; set; } = default!;
+    public List<Product>? Products { get; set; }
 }
 
 public class TillandsiaEntityTypeConfiguration : IEntityTypeConfiguration<Tillandsia>
