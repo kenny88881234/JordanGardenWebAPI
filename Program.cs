@@ -15,6 +15,7 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
     .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
     .Enrich.FromLogContext()
+    .WriteTo.Console()
     .WriteTo.File(@"Logs/log-.log", rollingInterval: RollingInterval.Day, outputTemplate: OUTPUT_TEMPLATE)
     .CreateLogger();
 

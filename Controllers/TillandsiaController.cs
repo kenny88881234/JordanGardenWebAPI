@@ -77,6 +77,11 @@ public class TillandsiaController : ControllerBase
         return apiResult;
     }
 
+    /// <summary>
+    /// 新增空氣鳳梨
+    /// </summary>
+    /// <param name="tillandsia">空氣鳳梨資料</param>
+    /// <returns>新增是否成功</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
