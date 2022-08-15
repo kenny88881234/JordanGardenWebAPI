@@ -16,9 +16,9 @@ public class TillandsiaController : ControllerBase
     }
 
     /// <summary>
-    /// 依ID取得空氣鳳梨
+    /// 依 ID 取得空氣鳳梨
     /// </summary>
-    /// <param name="Id">空氣鳳梨ID</param>
+    /// <param name="Id">空氣鳳梨 ID</param>
     /// <returns>空氣鳳梨</returns>
     [HttpGet("{Id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -27,7 +27,10 @@ public class TillandsiaController : ControllerBase
     {
         APIResult<Tillandsia> apiResult = new APIResult<Tillandsia>();
 
-        Tillandsia? tillandsia = await _service.GetTillandsiaAsync((int)Id);
+        //取得資料
+        Tillandsia? tillandsia = await _service.GetTillandsiaAsync(Id);
+
+        //檢查是否存在
         if (tillandsia is null)
         {
             apiResult.Succ = false;
@@ -50,15 +53,19 @@ public class TillandsiaController : ControllerBase
     /// 依頁數取得空氣鳳梨
     /// </summary>
     /// <param name="Page">頁數，為空時取得所有空氣鳳梨</param>
+    /// <param name="SearchString">欲搜尋字串</param>
     /// <returns>當前頁空氣鳳梨</returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<APIResult<List<Tillandsia>>> GetByPage(int Page = 0)
+    public ActionResult<APIResult<List<Tillandsia>>> GetByPageAndSearchString(int Page = 0, string SearchString = "")
     {
         APIResult<List<Tillandsia>> apiResult = new APIResult<List<Tillandsia>>();
 
-        List<Tillandsia> tillandsias = _service.GetTillandsias(Page);
+        //取得資料
+        List<Tillandsia> tillandsias = _service.GetTillandsias(Page, SearchString);
+
+        //檢查是否有資料
         if (tillandsias.Count is 0)
         {
             apiResult.Succ = false;
@@ -80,21 +87,23 @@ public class TillandsiaController : ControllerBase
     /// <summary>
     /// 新增空氣鳳梨
     /// </summary>
-    /// <param name="tillandsia">空氣鳳梨資料</param>
+    /// <param name="Tillandsia">空氣鳳梨資料</param>
     /// <returns>新增是否成功</returns>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<APIResult<Tillandsia>>> Add([FromBody]Tillandsia tillandsia)
+    public async Task<ActionResult<APIResult<Tillandsia>>> Add([FromBody]Tillandsia Tillandsia)
     {
         APIResult<Tillandsia> apiResult = new APIResult<Tillandsia>();
 
+        //檢查數據是否合法
         if(!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        if(!await _service.AddTillandsiaAsync(tillandsia))
+        //新增資料，並檢查是否存在
+        if(!await _service.AddTillandsiaAsync(Tillandsia))
         {
             apiResult.Succ = false;
             apiResult.ErrorCode = "";
@@ -105,6 +114,71 @@ public class TillandsiaController : ControllerBase
         }
 
         _logger.LogInformation("Success");
-        return CreatedAtAction(nameof(GetById), new { Id = tillandsia.Id }, tillandsia);
+        return CreatedAtAction(nameof(GetById), new { Id = Tillandsia.Id }, Tillandsia);
+    }
+
+    /// <summary>
+    /// 更新空氣鳳梨
+    /// </summary>
+    /// <param name="Id">空氣鳳梨 ID</param>
+    /// <param name="Tillandsia">空氣鳳梨資料</param>
+    /// <returns>更新是否成功</returns>
+    [HttpPut("{Id:int}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<APIResult<bool>>> Update(int Id, [FromBody]Tillandsia Tillandsia)
+    {
+        APIResult<bool> apiResult = new APIResult<bool>();
+
+        //檢查數據是否合法
+        if(!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        //檢查是否存在
+        if (await _service.UpdateTillandsiaAsync(Id, Tillandsia))
+        {
+            apiResult.Succ = false;
+            apiResult.ErrorCode = "";
+            apiResult.Message = "The id is not exist";
+
+            _logger.LogInformation(apiResult.Message);
+            return NotFound(apiResult);
+        }
+
+        _logger.LogInformation("Success");
+        return NoContent();
+    }
+
+    /// <summary>
+    /// 刪除空氣鳳梨
+    /// </summary>
+    /// <param name="Id">空氣鳳梨 ID</param>
+    /// <returns>刪除是否成功</returns>
+    [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<APIResult<bool>>> Delete(int Id)
+    {
+        APIResult<bool> apiResult = new APIResult<bool>();
+
+        //檢查是否存在
+        if (await _service.DeleteTillandsiaAsync(Id))
+        {
+            apiResult.Succ = false;
+            apiResult.ErrorCode = "";
+            apiResult.Message = "The id is not exist";
+
+            _logger.LogInformation(apiResult.Message);
+            return NotFound(apiResult);
+        }
+
+        apiResult.Succ = true;
+        apiResult.Message = "Success";
+
+        _logger.LogInformation(apiResult.Message);
+        return apiResult;
     }
 }
