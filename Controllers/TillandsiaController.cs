@@ -27,11 +27,8 @@ public class TillandsiaController : ControllerBase
     {
         APIResult<Tillandsia> apiResult = new APIResult<Tillandsia>();
 
-        //取得資料
-        Tillandsia? tillandsia = await _service.GetTillandsiaAsync(Id);
-
-        //檢查是否存在
-        if (tillandsia is null)
+        //檢查 ID 是否存在
+        if(!_service.IDIsExist(Id))
         {
             apiResult.Succ = false;
             apiResult.ErrorCode = "";
@@ -40,6 +37,9 @@ public class TillandsiaController : ControllerBase
             _logger.LogInformation(apiResult.Message);
             return NotFound(apiResult);
         }
+
+        //取得資料
+        Tillandsia? tillandsia = await _service.GetTillandsiaAsync(Id);
 
         apiResult.Succ = true;
         apiResult.Message = "Success";
@@ -58,12 +58,13 @@ public class TillandsiaController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<APIResult<List<Tillandsia>>> GetByPageAndSearchString(int Page = 0, string SearchString = "")
+    public ActionResult<APIResult<List<Tillandsia>>> GetByPageAndSearchString(string? SearchString, int Page = 0)
     {
         APIResult<List<Tillandsia>> apiResult = new APIResult<List<Tillandsia>>();
 
         //取得資料
-        List<Tillandsia> tillandsias = _service.GetTillandsias(Page, SearchString);
+        string searchString = SearchString ?? string.Empty;
+        List<Tillandsia> tillandsias = _service.GetTillandsias(Page, searchString);
 
         //檢查是否有資料
         if (tillandsias.Count is 0)
@@ -92,18 +93,18 @@ public class TillandsiaController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<APIResult<Tillandsia>>> Add([FromBody]Tillandsia Tillandsia)
+    public async Task<ActionResult<APIResult<Tillandsia>>> Add([FromBody] Tillandsia Tillandsia)
     {
         APIResult<Tillandsia> apiResult = new APIResult<Tillandsia>();
 
         //檢查數據是否合法
-        if(!ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        //新增資料，並檢查是否存在
-        if(!await _service.AddTillandsiaAsync(Tillandsia))
+        //檢查名稱是否存在
+        if(_service.NameIsExist(Tillandsia.NameEng))
         {
             apiResult.Succ = false;
             apiResult.ErrorCode = "";
@@ -112,6 +113,9 @@ public class TillandsiaController : ControllerBase
             _logger.LogInformation(apiResult.Message);
             return BadRequest(apiResult);
         }
+
+        //新增資料
+        await _service.AddTillandsiaAsync(Tillandsia);
 
         _logger.LogInformation("Success");
         return CreatedAtAction(nameof(GetById), new { Id = Tillandsia.Id }, Tillandsia);
@@ -127,18 +131,18 @@ public class TillandsiaController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<APIResult<bool>>> Update(int Id, [FromBody]Tillandsia Tillandsia)
+    public async Task<ActionResult<APIResult<bool>>> Update(int Id, [FromBody] Tillandsia Tillandsia)
     {
         APIResult<bool> apiResult = new APIResult<bool>();
 
         //檢查數據是否合法
-        if(!ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        //檢查是否存在
-        if (await _service.UpdateTillandsiaAsync(Id, Tillandsia))
+        //檢查 ID 是否存在
+        if(!_service.IDIsExist(Id))
         {
             apiResult.Succ = false;
             apiResult.ErrorCode = "";
@@ -147,6 +151,20 @@ public class TillandsiaController : ControllerBase
             _logger.LogInformation(apiResult.Message);
             return NotFound(apiResult);
         }
+
+        //檢查名稱是否存在
+        if(_service.NameIsExist(Tillandsia.NameEng, Id))
+        {
+            apiResult.Succ = false;
+            apiResult.ErrorCode = "";
+            apiResult.Message = "The name is alredy exist";
+
+            _logger.LogInformation(apiResult.Message);
+            return BadRequest(apiResult);
+        }
+
+        //更新資料
+        await _service.UpdateTillandsiaAsync(Id, Tillandsia);
 
         _logger.LogInformation("Success");
         return NoContent();
@@ -164,8 +182,8 @@ public class TillandsiaController : ControllerBase
     {
         APIResult<bool> apiResult = new APIResult<bool>();
 
-        //檢查是否存在
-        if (await _service.DeleteTillandsiaAsync(Id))
+        //檢查 ID 是否存在
+        if(!_service.IDIsExist(Id))
         {
             apiResult.Succ = false;
             apiResult.ErrorCode = "";
@@ -175,8 +193,11 @@ public class TillandsiaController : ControllerBase
             return NotFound(apiResult);
         }
 
+        //刪除資料
+        await _service.DeleteTillandsiaAsync(Id);
         apiResult.Succ = true;
         apiResult.Message = "Success";
+        apiResult.Data = true;
 
         _logger.LogInformation(apiResult.Message);
         return apiResult;
