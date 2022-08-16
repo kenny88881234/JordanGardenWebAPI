@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
 
+namespace JordanGardenStockWebAPI.Models;
+
 public class APIResult<T>
 {
     [JsonPropertyName("succ")]

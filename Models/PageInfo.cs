@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
 
+namespace JordanGardenStockWebAPI.Models;
+
 public class PageInfo
 {
     [JsonPropertyName("dataNumPerPage")]

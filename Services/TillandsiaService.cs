@@ -1,19 +1,23 @@
+using JordanGardenStockWebAPI.Models;
+
+namespace JordanGardenStockWebAPI.Services;
+
 public class TillandsiaService
 {
     private readonly JordanGardenStockDbContext _db;
-    private static readonly int DataNumPerPage = 2;
+    private static readonly int DataNumPerPage = 20;
 
     public TillandsiaService(JordanGardenStockDbContext dbContext)
     {
         _db = dbContext;
     }
 
-    public bool IDIsExist(int id)
+    public bool IsIDExist(int id)
     {
         return _db.Tillandsias.Any(t => t.Id == id);
     }
 
-    public bool NameIsExist(string name, int excludeId = 0)
+    public bool IsNameExist(string name, int excludeId = 0)
     {
         return _db.Tillandsias.Any(t => t.NameEng == name && t.Id != excludeId);
     }
@@ -49,12 +53,6 @@ public class TillandsiaService
 
     public async Task<bool> AddTillandsiaAsync(Tillandsia tillandsia)
     {
-        //檢查是否已存在
-        if (_db.Tillandsias.Any(t => t.NameEng == tillandsia.NameEng))
-        {
-            return false;
-        }
-
         //新增
         await _db.Tillandsias.AddAsync(tillandsia);
         await _db.SaveChangesAsync();
@@ -64,7 +62,7 @@ public class TillandsiaService
     public async Task<bool> UpdateTillandsiaAsync(int id, Tillandsia tillandsia)
     {
         Tillandsia? oldTillandsia = await _db.Tillandsias.FindAsync(id);
-        if(oldTillandsia is null)
+        if (oldTillandsia is null)
         {
             return false;
         }

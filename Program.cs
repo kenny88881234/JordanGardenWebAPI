@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using Microsoft.Extensions.Hosting;
 using System.IO;
+using JordanGardenStockWebAPI.Services;
 
 const string OUTPUT_TEMPLATE = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
 Log.Logger = new LoggerConfiguration()
@@ -37,6 +38,7 @@ try
             providerOptions => { providerOptions.EnableRetryOnFailure(); }));
 
     builder.Services.AddTransient<TillandsiaService>();
+    builder.Services.AddTransient<CompanyService>();
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
