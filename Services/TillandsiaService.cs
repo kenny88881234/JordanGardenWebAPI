@@ -1,7 +1,7 @@
 public class TillandsiaService
 {
     private readonly JordanGardenStockDbContext _db;
-    private static readonly int DataNumPerPage = 20;
+    private static readonly int DataNumPerPage = 2;
 
     public TillandsiaService(JordanGardenStockDbContext dbContext)
     {
@@ -34,6 +34,17 @@ public class TillandsiaService
 
         //回傳當頁資料
         return _db.Tillandsias.Where(t => t.NameEng.Contains(searchString) || (t.NameChi == null ? false : t.NameChi.Contains(searchString))).Skip((page - 1) * DataNumPerPage).Take(DataNumPerPage).OrderBy(t => t.NameEng).ToList();
+    }
+
+    public PageInfo GetPageInfo()
+    {
+        int totalDataNum = _db.Tillandsias.Count();
+        return new PageInfo()
+        {
+            DataNumPerPage = DataNumPerPage,
+            TotalDataNum = totalDataNum,
+            TotalPageNum = !(totalDataNum % DataNumPerPage is 0) ? (totalDataNum / DataNumPerPage) + 1 : totalDataNum / DataNumPerPage
+        };
     }
 
     public async Task<bool> AddTillandsiaAsync(Tillandsia tillandsia)

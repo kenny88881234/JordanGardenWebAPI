@@ -86,6 +86,22 @@ public class TillandsiaController : ControllerBase
     }
 
     /// <summary>
+    /// 取得頁數資訊
+    /// </summary>
+    /// <returns>頁數資訊</returns>
+    [HttpGet("PageInfo")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<APIResult<PageInfo>> PageInfo()
+    {
+        return new APIResult<PageInfo>()
+        {
+            Succ = true,
+            Message = "Success",
+            Data = _service.GetPageInfo()
+        };
+    }
+
+    /// <summary>
     /// 新增空氣鳳梨
     /// </summary>
     /// <param name="Tillandsia">空氣鳳梨資料</param>
