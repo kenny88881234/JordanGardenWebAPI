@@ -33,16 +33,16 @@ public class CompanyService
         return await _db.Companies.FindAsync(id);
     }
 
-    public List<Company> GetCompanies(int page, string searchString)
+    public List<Company> GetCompanies(int page, string searchString, string country)
     {
         //page 為 0 時回傳所有資料
         if (page is 0)
         {
-            return _db.Companies.Where(c => c.Name.Contains(searchString)).OrderBy(t => t.Name).ToList();
+            return _db.Companies.Where(c => c.Name.ToLower().Contains(searchString.ToLower()) && c.Country.Contains(country)).OrderBy(t => t.Name).ToList();
         }
 
         //回傳當頁資料
-        return _db.Companies.Where(c => c.Name.Contains(searchString)).Skip((page - 1) * DataNumPerPage).Take(DataNumPerPage).OrderBy(t => t.Name).ToList();
+        return _db.Companies.Where(c => c.Name.ToLower().Contains(searchString.ToLower()) && c.Country.Contains(country)).Skip((page - 1) * DataNumPerPage).Take(DataNumPerPage).OrderBy(t => t.Name).ToList();
     }
 
     public PageInfo GetPageInfo()

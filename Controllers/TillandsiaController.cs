@@ -30,7 +30,7 @@ public class TillandsiaController : ControllerBase
         APIResult<Tillandsia> apiResult = new APIResult<Tillandsia>();
 
         //檢查 ID 是否存在
-        if(!_service.IsIDExist(Id))
+        if (!_service.IsIDExist(Id))
         {
             apiResult.Succ = false;
             apiResult.ErrorCode = "";
@@ -52,15 +52,15 @@ public class TillandsiaController : ControllerBase
     }
 
     /// <summary>
-    /// 依頁數取得空氣鳳梨
+    /// 依條件取得空氣鳳梨
     /// </summary>
-    /// <param name="Page">頁數，為空時取得所有空氣鳳梨</param>
     /// <param name="SearchString">欲搜尋字串</param>
+    /// <param name="Page">頁數，為空時取得所有空氣鳳梨</param>
     /// <returns>當前頁空氣鳳梨</returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<APIResult<List<Tillandsia>>> GetByPageAndSearchString(string? SearchString, int Page = 0)
+    public ActionResult<APIResult<List<Tillandsia>>> GetByCondition(string? SearchString, int Page = 0)
     {
         APIResult<List<Tillandsia>> apiResult = new APIResult<List<Tillandsia>>();
 
@@ -122,7 +122,7 @@ public class TillandsiaController : ControllerBase
         }
 
         //檢查名稱是否存在
-        if(_service.IsNameExist(Tillandsia.NameEng))
+        if (_service.IsNameExist(Tillandsia.NameEng))
         {
             apiResult.Succ = false;
             apiResult.ErrorCode = "";
@@ -160,7 +160,7 @@ public class TillandsiaController : ControllerBase
         }
 
         //檢查 ID 是否存在
-        if(!_service.IsIDExist(Id))
+        if (!_service.IsIDExist(Id))
         {
             apiResult.Succ = false;
             apiResult.ErrorCode = "";
@@ -171,7 +171,7 @@ public class TillandsiaController : ControllerBase
         }
 
         //檢查名稱是否存在
-        if(_service.IsNameExist(Tillandsia.NameEng, Id))
+        if (_service.IsNameExist(Tillandsia.NameEng, Id))
         {
             apiResult.Succ = false;
             apiResult.ErrorCode = "";
@@ -201,7 +201,7 @@ public class TillandsiaController : ControllerBase
         APIResult<bool> apiResult = new APIResult<bool>();
 
         //檢查 ID 是否存在
-        if(!_service.IsIDExist(Id))
+        if (!_service.IsIDExist(Id))
         {
             apiResult.Succ = false;
             apiResult.ErrorCode = "";

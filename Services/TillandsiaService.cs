@@ -33,11 +33,11 @@ public class TillandsiaService
         //page 為 0 時回傳所有資料
         if (page is 0)
         {
-            return _db.Tillandsias.Where(t => t.NameEng.Contains(searchString) || (t.NameChi == null ? false : t.NameChi.Contains(searchString))).OrderBy(t => t.NameEng).ToList();
+            return _db.Tillandsias.Where(t => t.NameEng.ToLower().Contains(searchString.ToLower()) || (t.NameChi == null ? false : t.NameChi.Contains(searchString))).OrderBy(t => t.NameEng).ToList();
         }
 
         //回傳當頁資料
-        return _db.Tillandsias.Where(t => t.NameEng.Contains(searchString) || (t.NameChi == null ? false : t.NameChi.Contains(searchString))).Skip((page - 1) * DataNumPerPage).Take(DataNumPerPage).OrderBy(t => t.NameEng).ToList();
+        return _db.Tillandsias.Where(t => t.NameEng.ToLower().Contains(searchString.ToLower()) || (t.NameChi == null ? false : t.NameChi.Contains(searchString))).Skip((page - 1) * DataNumPerPage).Take(DataNumPerPage).OrderBy(t => t.NameEng).ToList();
     }
 
     public PageInfo GetPageInfo()

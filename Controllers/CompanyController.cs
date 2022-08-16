@@ -30,7 +30,7 @@ public class CompanyController : ControllerBase
         APIResult<Company> apiResult = new APIResult<Company>();
 
         //檢查 ID 是否存在
-        if(!_service.IsIDExist(Id))
+        if (!_service.IsIDExist(Id))
         {
             apiResult.Succ = false;
             apiResult.ErrorCode = "";
@@ -52,21 +52,23 @@ public class CompanyController : ControllerBase
     }
 
     /// <summary>
-    /// 依頁數取得公司
+    /// 依條件取得公司
     /// </summary>
-    /// <param name="Page">頁數，為空時取得所有公司</param>
     /// <param name="SearchString">欲搜尋字串</param>
+    /// <param name="Country">欲搜尋字串</param>
+    /// <param name="Page">頁數，為空時取得所有公司</param>
     /// <returns>當前頁公司</returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<APIResult<List<Company>>> GetByPageAndSearchString(string? SearchString, int Page = 0)
+    public ActionResult<APIResult<List<Company>>> GetByCondition(string? SearchString, string? Country, int Page = 0)
     {
         APIResult<List<Company>> apiResult = new APIResult<List<Company>>();
 
         //取得資料
         string searchString = SearchString ?? string.Empty;
-        List<Company> tillandsias = _service.GetCompanies(Page, searchString);
+        string country = Country ?? string.Empty;
+        List<Company> tillandsias = _service.GetCompanies(Page, searchString, country);
 
         //檢查是否有資料
         if (tillandsias.Count is 0)
@@ -122,7 +124,7 @@ public class CompanyController : ControllerBase
         }
 
         //檢查名稱是否存在
-        if(_service.IsNameExist(Company.Name))
+        if (_service.IsNameExist(Company.Name))
         {
             apiResult.Succ = false;
             apiResult.ErrorCode = "";
@@ -133,7 +135,7 @@ public class CompanyController : ControllerBase
         }
 
         //檢查信箱是否存在
-        if(_service.IsMailExist(Company.Mail))
+        if (_service.IsMailExist(Company.Mail))
         {
             apiResult.Succ = false;
             apiResult.ErrorCode = "";
@@ -171,7 +173,7 @@ public class CompanyController : ControllerBase
         }
 
         //檢查 ID 是否存在
-        if(!_service.IsIDExist(Id))
+        if (!_service.IsIDExist(Id))
         {
             apiResult.Succ = false;
             apiResult.ErrorCode = "";
@@ -182,7 +184,7 @@ public class CompanyController : ControllerBase
         }
 
         //檢查名稱是否存在
-        if(_service.IsNameExist(Company.Name, Id))
+        if (_service.IsNameExist(Company.Name, Id))
         {
             apiResult.Succ = false;
             apiResult.ErrorCode = "";
@@ -193,7 +195,7 @@ public class CompanyController : ControllerBase
         }
 
         //檢查信箱是否存在
-        if(_service.IsMailExist(Company.Mail))
+        if (_service.IsMailExist(Company.Mail))
         {
             apiResult.Succ = false;
             apiResult.ErrorCode = "";
@@ -223,7 +225,7 @@ public class CompanyController : ControllerBase
         APIResult<bool> apiResult = new APIResult<bool>();
 
         //檢查 ID 是否存在
-        if(!_service.IsIDExist(Id))
+        if (!_service.IsIDExist(Id))
         {
             apiResult.Succ = false;
             apiResult.ErrorCode = "";
