@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using JordanGardenStockWebAPI.Models;
 
 namespace JordanGardenStockWebAPI.Services;
@@ -5,6 +6,7 @@ namespace JordanGardenStockWebAPI.Services;
 public class TillandsiaService
 {
     private readonly JordanGardenStockDbContext _db;
+    private static readonly string ImageFilePath = "~/Desktop/develop/temp/";
     private static readonly int DataNumPerPage = 20;
 
     public TillandsiaService(JordanGardenStockDbContext dbContext)
@@ -67,6 +69,8 @@ public class TillandsiaService
             return false;
         }
 
+        //
+
         //更新
         oldTillandsia.NameEng = tillandsia.NameEng;
         oldTillandsia.NameChi = tillandsia.NameChi;
@@ -86,5 +90,31 @@ public class TillandsiaService
         }
 
         return false;
+    }
+
+    public async Task<string> AddImageAsync(IFormFile image)
+    {
+        //計算檔名
+        MD5 md5 = MD5.Create();
+        byte[] hash = await md5.ComputeHashAsync(image.OpenReadStream());
+        string fileName = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant() + Path.GetExtension(image.FileName);
+
+        //存檔
+        using (FileStream fs = File.Open(Path.Combine(ImageFilePath, fileName), FileMode.OpenOrCreate))
+        {
+            image.CopyTo(fs);
+        }
+
+        return fileName;
+    }
+
+    public void DeleteImage(string fileName)
+    {
+        //刪除檔案
+        string filePath = Path.Combine(ImageFilePath, fileName);
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+        }
     }
 }

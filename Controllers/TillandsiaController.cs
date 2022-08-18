@@ -1,3 +1,4 @@
+using JordanGardenStockWebAPI.Extensions;
 using JordanGardenStockWebAPI.Models;
 using JordanGardenStockWebAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -216,6 +217,33 @@ public class TillandsiaController : ControllerBase
         apiResult.Succ = true;
         apiResult.Message = "Success";
         apiResult.Data = true;
+
+        _logger.LogInformation(apiResult.Message);
+        return apiResult;
+    }
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<APIResult<string>>> UploadImageAsync([FromBody] IFormFile Image)
+    {
+        APIResult<string> apiResult = new APIResult<string>();
+
+        //檢查是否為相片
+        if(!Image.IsImage())
+        {
+            apiResult.Succ = false;
+            apiResult.ErrorCode = "";
+            apiResult.Message = "The file type is not allow";
+
+            _logger.LogInformation(apiResult.Message);
+            return BadRequest(apiResult);
+        }
+
+        //儲存相片
+        apiResult.Succ = true;
+        apiResult.Message = "Success";
+        apiResult.Data = await _service.AddImageAsync(Image);
 
         _logger.LogInformation(apiResult.Message);
         return apiResult;
