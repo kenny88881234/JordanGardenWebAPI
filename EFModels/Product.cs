@@ -1,22 +1,33 @@
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 public class Product
 {
+    [JsonPropertyName("id")]
     public int Id { get; set; }
 
+    [JsonPropertyName("companyId")]
     public int CompanyId { get; set; }
 
+    [JsonPropertyName("tillandsiaId")]
     public int TillandsiaId { get; set; }
 
+    [JsonPropertyName("price")]
     public decimal Price { get; set; }
 
+    [JsonPropertyName("size")]
+    [MaxLength(20)]
     public string? Size { get; set; }
 
+    [JsonPropertyName("quantity")]
     public int? Quantity { get; set; }
     
+    [JsonIgnore]
     public Company Company { get; set; } = default!;
 
+    [JsonIgnore]
     public Tillandsia Tillandsia { get; set; } = default!;
 }
 

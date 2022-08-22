@@ -95,13 +95,16 @@ public class CompanyController : ControllerBase
     /// <returns>頁數資訊</returns>
     [HttpGet("PageInfo")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<APIResult<PageInfo>> PageInfo()
+    public ActionResult<APIResult<PageInfo>> PageInfo(string? SearchString, string? Country)
     {
+        string searchString = SearchString ?? string.Empty;
+        string country = Country ?? string.Empty;
+        _logger.LogInformation("Success");
         return new APIResult<PageInfo>()
         {
             Succ = true,
             Message = "Success",
-            Data = _service.GetPageInfo()
+            Data = _service.GetPageInfo(searchString, country)
         };
     }
 

@@ -39,6 +39,7 @@ try
 
     builder.Services.AddTransient<TillandsiaService>();
     builder.Services.AddTransient<CompanyService>();
+    builder.Services.AddTransient<ProductService>();
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();

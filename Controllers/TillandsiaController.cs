@@ -91,16 +91,19 @@ public class TillandsiaController : ControllerBase
     /// <summary>
     /// 取得頁數資訊
     /// </summary>
+    /// /// <param name="SearchString">欲搜尋字串</param>
     /// <returns>頁數資訊</returns>
     [HttpGet("PageInfo")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<APIResult<PageInfo>> PageInfo()
+    public ActionResult<APIResult<PageInfo>> PageInfo(string? SearchString)
     {
+        string searchString = SearchString ?? string.Empty;
+        _logger.LogInformation("Success");
         return new APIResult<PageInfo>()
         {
             Succ = true,
             Message = "Success",
-            Data = _service.GetPageInfo()
+            Data = _service.GetPageInfo(searchString)
         };
     }
 

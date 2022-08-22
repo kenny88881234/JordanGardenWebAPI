@@ -42,9 +42,9 @@ public class TillandsiaService
         return _db.Tillandsias.Where(t => t.NameEng.ToLower().Contains(searchString.ToLower()) || (t.NameChi == null ? false : t.NameChi.Contains(searchString))).Skip((page - 1) * DataNumPerPage).Take(DataNumPerPage).OrderBy(t => t.NameEng).ToList();
     }
 
-    public PageInfo GetPageInfo()
+    public PageInfo GetPageInfo(string searchString)
     {
-        int totalDataNum = _db.Tillandsias.Count();
+        int totalDataNum = _db.Tillandsias.Where(t => t.NameEng.ToLower().Contains(searchString.ToLower()) || (t.NameChi == null ? false : t.NameChi.Contains(searchString))).Count();
         return new PageInfo()
         {
             DataNumPerPage = DataNumPerPage,

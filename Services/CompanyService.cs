@@ -45,9 +45,9 @@ public class CompanyService
         return _db.Companies.Where(c => c.Name.ToLower().Contains(searchString.ToLower()) && c.Country.Contains(country)).Skip((page - 1) * DataNumPerPage).Take(DataNumPerPage).OrderBy(t => t.Name).ToList();
     }
 
-    public PageInfo GetPageInfo()
+    public PageInfo GetPageInfo(string searchString, string country)
     {
-        int totalDataNum = _db.Companies.Count();
+        int totalDataNum = _db.Companies.Where(c => c.Name.ToLower().Contains(searchString.ToLower()) && c.Country.Contains(country)).Count();
         return new PageInfo()
         {
             DataNumPerPage = DataNumPerPage,
