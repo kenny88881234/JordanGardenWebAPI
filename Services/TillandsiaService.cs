@@ -69,7 +69,11 @@ public class TillandsiaService
             return false;
         }
 
-        //
+        //若有更改檔案則刪除舊的
+        if (!string.IsNullOrEmpty(oldTillandsia.Image) && oldTillandsia.Image != tillandsia.Image)
+        {
+            DeleteImage(oldTillandsia.Image);
+        }
 
         //更新
         oldTillandsia.NameEng = tillandsia.NameEng;
