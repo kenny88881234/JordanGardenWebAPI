@@ -91,7 +91,7 @@ public class TillandsiaController : ControllerBase
     /// <summary>
     /// 取得頁數資訊
     /// </summary>
-    /// /// <param name="SearchString">欲搜尋字串</param>
+    /// <param name="SearchString">欲搜尋字串</param>
     /// <returns>頁數資訊</returns>
     [HttpGet("PageInfo")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -225,10 +225,15 @@ public class TillandsiaController : ControllerBase
         return apiResult;
     }
 
-    [HttpPost]
+    /// <summary>
+    /// 上傳空氣鳳梨相片
+    /// </summary>
+    /// <param name="Image">相片資料</param>
+    /// <returns>儲存相片檔案名稱</returns>
+    [HttpPost("UploadImage")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<APIResult<string>>> UploadImageAsync([FromBody] IFormFile Image)
+    public async Task<ActionResult<APIResult<string>>> UploadImage([FromBody] IFormFile Image)
     {
         APIResult<string> apiResult = new APIResult<string>();
 

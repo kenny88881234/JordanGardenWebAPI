@@ -12,6 +12,11 @@ public class ProductService
         _db = dbContext;
     }
 
+    public bool IsExist(int id)
+    {
+        return _db.Products.Any(p => p.Id == id);
+    }
+
     public bool IsExist(int companyId, int tillandsiaId)
     {
         return _db.Products.Any(p => p.CompanyId == companyId && p.TillandsiaId == tillandsiaId);
